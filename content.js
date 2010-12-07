@@ -23,6 +23,7 @@ var keysOn = true;
 var alreadyRequested;
 var currentTopic = 1;
 var commentMode = $(".commentarea").length != 0;
+var disableInput = false;
 // comment in non comment mode are for the profile page, message are for mails
 var topics = commentMode ?
     $(".commentarea").children(".sitetable").find(".thing.comment").children(".entry") :
@@ -34,11 +35,17 @@ $(".commentarea").bind("DOMNodeInserted", disableKeysOnInput);
 disableKeysOnInput();
 
 function disableKeysOnInput() {
-    $("input,textarea").focus(function () {
+    $("input,textarea,button").focus(function () {
 	keysOn = false;
     });
-    $("input,textarea").blur(function () {
+    $("input,textarea,button").blur(function () {
 	keysOn = true;
+    });
+    $("button").click(function () {
+	keysOn = true;
+    });
+    $("button").keyup(function (event) {
+        if(event.keyCode == 32 || event.keyCode == 13) keysOn = true;
     });
 }
 
@@ -155,24 +162,24 @@ function hideTopic() {
 	if(topic().children("div.collapsed").is(':visible')) topic().children("div.collapsed").children("a.expand").click();
 	else topic().children("div.noncollapsed").children("p.tagline").children("a.expand").click();
     }
-    else topic().children("div.entry").children("ul.flat-list").find(".state-button.hide-button").find("a").click();    
+    else topic().children("div.entry").children("ul.flat-list").find(".state-button.hide-button").find("a").click();
 }
 function expando() {
     if(commentMode) $(topic().children("div.noncollapsed").children("ul.flat-list").children("li")[topic().children("div.noncollapsed").children("ul.flat-list").children("li").length - 1]).children("a").click();
-    else topic().children("div.entry").children("div.expando-button").click();    
+    else topic().children("div.entry").children("div.expando-button").click();
 }
 
 function keyd(event) {
-    if(!keysOn) return true;
+    if(event.keyCode == 32 && event.altKey) disableInput = !disableInput;
+    if(!keysOn || disableInput) return true;
     if(event.keyCode == 38) { // Up
 	if(event.ctrlKey) {
 	    upvote();
 	} else {
 	    if(commentMode) {
 		if(event.shiftKey) previousSibling();
-		else if(event.altKey || event.metaKey) previousParent();
 		else previousTopic(1);
-	    } else { 
+	    } else {
 		previousTopic(1);
 	    }
 	}
@@ -182,16 +189,15 @@ function keyd(event) {
 	} else {
 	    if(commentMode) {
 		if(event.shiftKey) nextSibling();
-		else if(event.altKey || event.metaKey) nextParent();
 		else nextTopic(1);
-	    } else { 
+	    } else {
 		nextTopic(1);
 	    }
 	}
     } else if(event.keyCode == 33) { // Page Up
 	previousTopic(5);
     } else if(event.keyCode == 34) { // Page Down
-	nextTopic(5);	
+	nextTopic(5);
     } else if(event.keyCode == 36) { // Begin
 	firstTopic();
     } else if(event.keyCode == 35) { // End
@@ -199,9 +205,17 @@ function keyd(event) {
     } else if(event.keyCode == 46) { // Del
 	hideTopic();
     } else if(event.keyCode == 13 || event.keyCode == 39) { // Enter or Left
-	openCurrent(event.shiftKey);
+	if(commentMode) {
+	    nextParent();
+	} else {
+	    openCurrent(event.shiftKey);
+	}
     } else if(event.keyCode == 37) { // Right
-	openCurrentComment(event.shiftKey);
+	if(commentMode) {
+	    previousParent();
+	} else {
+	    openCurrentComment(event.shiftKey);
+	}
     } else if(event.keyCode == 32) { // Space
 	expando();
     } else if(event.keyCode == 27) { // Escape
@@ -212,21 +226,21 @@ function keyd(event) {
     event.stopPropagation();
     return false;
 }
+
 function scrolld (event, delta) {
+    if(event.altKey || disableInput) return true;
     if(delta < 0) {
 	    if(commentMode) {
 		if(event.shiftKey) nextSibling();
-		else if(event.altKey || event.metaKey) nextParent();
 		else nextTopic(1);
-	    } else { 
+	    } else {
 		nextTopic(1);
 	    }
     } else {
 	    if(commentMode) {
 		if(event.shiftKey) previousSibling();
-		else if(event.altKey || event.metaKey) previousParent();
 		else previousTopic(1);
-	    } else { 
+	    } else {
 		previousTopic(1);
 	    }
     }
@@ -296,6 +310,7 @@ function nextParent() {
     currentTopic = oldCurrentTopic;
     highlightCurrentTopic();
 }
+
 function has(thing) {
     return thing.length > 0;
 }
@@ -304,5 +319,5 @@ function _log(toLog) {
     if(_debug) console.log(toLog);
 }
 function turnOnDebug() {
-    _debug = true;
+    _debug = false;
 }
