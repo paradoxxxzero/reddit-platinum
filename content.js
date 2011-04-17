@@ -79,8 +79,6 @@
 	 disableKeysOnInput();
 	 alreadyRequested = false;
      }
-
-
      function highlightCurrentTopic() {
 	 topic().animate(highlighted_style, 500);
 	 _log("Highlighted topic : " + currentTopic);

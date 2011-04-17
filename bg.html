@@ -7,7 +7,7 @@
       chrome.pageAction.show(tabId);
     }
   };
-  
+
   // Listen for any changes to the URL of any tab.
   chrome.tabs.onUpdated.addListener(checkForValidUrl);
 
@@ -19,7 +19,11 @@
         "index":sender.tab.index
        }, function (tab) {
          chrome.tabs.executeScript(tab.id, {
-           code: "document.addEventListener('keydown', function (event) { if(event.keyCode == 37 && (typeof(keysOn) === 'undefined' || keysOn === true)) self.close(); });"
+           code: "\
+	   document.addEventListener('keydown', \
+	     function (event) { \
+	       if(event.keyCode == 37 && (typeof(keysOn) === 'undefined' || keysOn === true)) self.close(); \
+	     });"
          });
        });
     }
