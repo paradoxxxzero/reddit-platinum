@@ -170,7 +170,10 @@ function expando() {
 }
 
 function keyd(event) {
-    if(event.keyCode == 32 && event.altKey) disableInput = !disableInput;
+    if(event.keyCode == 32 && event.altKey) {
+ 	disableInput = !disableInput;
+ 	return true;
+    }
     if(!keysOn || disableInput) return true;
     if(event.keyCode == 38) { // Up
 	if(event.ctrlKey) {
