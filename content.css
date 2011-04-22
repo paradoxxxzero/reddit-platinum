@@ -1,0 +1,10 @@
+.__highlighted {
+   background-color: #eee !important;
+   border-color: #ccc !important;
+   box-shadow: 4px 4px 5px #ccc;
+}
+.__normal {
+   background-color: #fff;
+   border: 1px solid rgba(255, 255, 255, 0);
+   -webkit-transition: 1s;
+}

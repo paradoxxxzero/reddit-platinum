@@ -25,20 +25,6 @@
      var commentMode = $(".commentarea").length != 0;
 
      var disableInput = false;
-     var highlighted_style = {
-	 backgroundColor: '#eef',
-	 borderTopColor: '#ccc',
-	 borderBottomColor: '#ccc',
-	 borderLeftColor: '#ccc',
-	 borderRightColor: '#ccc'
-     };
-     var normal_style = {
-	 backgroundColor: '#fff',
-	 borderTopColor: '#fff',
-	 borderBottomColor: '#fff',
-	 borderLeftColor: '#fff',
-	 borderRightColor: '#fff'
-     };
      // comment in non comment mode are for the profile page, message are for mails
      var topics = commentMode ?
 	 $(".commentarea").children(".sitetable").find(".thing.comment").children(".entry") :
@@ -74,17 +60,20 @@
 	 topics = commentMode ?
 	     $(".commentarea").children(".sitetable").find(".thing.comment").children(".entry") :
 	     $("#siteTable > .thing.link,#siteTable > .thing.comment,#siteTable > .thing.message");
-	 topics.css({border: '1px solid #fff'});
-	 topic().css(highlighted_style, 500);
+	 // topics.css({border: '1px solid #fff'});
+	 // topic().css(highlighted_style, 500);
+	 topic().addClass("__highlighted");
 	 disableKeysOnInput();
 	 alreadyRequested = false;
      }
      function highlightCurrentTopic() {
-	 topic().animate(highlighted_style, 500);
+	 topic().addClass("__highlighted");
+	 // topic().animate(highlighted_style, 500);
 	 _log("Highlighted topic : " + currentTopic);
      }
      function lowlightCurrentTopic() {
-	 topic().animate(normal_style, 500);
+	 topic().removeClass("__highlighted");
+	 // topic().animate(normal_style, 500);
 	 _log("Delighted topic : " + currentTopic);
      }
      function scrollToCurrentTopic(fromAbove) {
@@ -327,7 +316,7 @@
 	 if(!has(topics)) {
 	     throw "No topics found";
 	 }
-	 topics.css({border: '1px solid #fff'});
+	 topics.addClass("__normal");
 	 highlightCurrentTopic();
      }
 
