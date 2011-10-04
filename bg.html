@@ -20,9 +20,15 @@
        }, function (tab) {
          chrome.tabs.executeScript(tab.id, {
            code: "\
+           var rightPressed = false; \
 	   document.addEventListener('keydown', \
 	     function (event) { \
-	       if(event.keyCode == 37 && (typeof(keysOn) === 'undefined' || keysOn === true)) self.close(); \
+               if (event.keyCode == 39) { \
+                 rightPressed = true; \
+               } else if (!rightPressed || event.altKey) { \
+                 if(event.keyCode == 37 && (typeof(keysOn) === 'undefined' || \
+                    keysOn === true)) self.close(); \
+               } \
 	     });"
          });
        });
