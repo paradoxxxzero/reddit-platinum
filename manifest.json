@@ -9,7 +9,7 @@
    "description": "reddit plugin that optimizes reddit keyboard navigation",
    "name": "reddit platinum",
    "permissions": [
-     "tabs", "http://*/*"
+     "tabs", "http://*/*", "https://*/*"
    ],
    "update_url": "http://clients2.google.com/service/update2/crx",
    "version": "1.2"
